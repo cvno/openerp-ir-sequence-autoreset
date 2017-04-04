@@ -68,7 +68,7 @@ class IrSequence(models.Model):
             if self.auto_reset:
                 current_time = ':'.join([self.reset_period, self.reset_period])
                 if current_time != self.reset_time:
-                    self._cr.execute("UPDATE ir_sequence SET reset_time=%s WHERE id=%s ", (current_time, self.id))
+                    self.reset_time = current_time
                     _alter_sequence(self._cr, "ir_sequence_%03d" % self.id, self.number_increment, self.reset_init_number)  # NoQA
                     self._cr.commit()
             number_next = _select_nextval(self._cr, 'ir_sequence_%03d' % self.id)
@@ -85,7 +85,7 @@ class IrSequenceDateRange(models.Model):
             if self.auto_reset:
                 current_time = ':'.join([self.reset_period, self.reset_period])
                 if current_time != self.reset_time:
-                    self._cr.execute("UPDATE ir_sequence SET reset_time=%s WHERE id=%s ", (current_time, self.id))
+                    self.reset_time = current_time
                     _alter_sequence(self._cr, "ir_sequence_%03d" % self.id, self.number_increment, self.reset_init_number)  # NoQA
                     self._cr.commit()
             number_next = _select_nextval(self._cr, 'ir_sequence_%03d_%03d' % (self.sequence_id.id, self.id))
