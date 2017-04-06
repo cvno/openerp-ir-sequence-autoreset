@@ -84,8 +84,8 @@ class IrSequenceDateRange(models.Model):
         if self.sequence_id.implementation == 'standard':
             if self.auto_reset:
                 current_time = ':'.join([self.reset_period, self.reset_period])
-                if current_time != self.reset_time:
-                    self.reset_time = current_time
+                if current_time != self.sequence_id.reset_time:
+                    self.sequence_id.reset_time = current_time
                     _alter_sequence(self._cr, "ir_sequence_%03d" % self.id, self.number_increment, self.reset_init_number)  # NoQA
                     self._cr.commit()
             number_next = _select_nextval(self._cr, 'ir_sequence_%03d_%03d' % (self.sequence_id.id, self.id))
