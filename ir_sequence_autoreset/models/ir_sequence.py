@@ -82,7 +82,7 @@ class IrSequenceDateRange(models.Model):
 
     def _next(self):
         if self.sequence_id.implementation == 'standard':
-            if self.auto_reset:
+            if self.sequence_id.auto_reset:
                 current_time = ':'.join([self.reset_period, self.reset_period])
                 if current_time != self.sequence_id.reset_time:
                     self.sequence_id.reset_time = current_time
