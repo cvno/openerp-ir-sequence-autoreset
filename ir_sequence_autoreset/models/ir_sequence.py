@@ -19,6 +19,7 @@
 #
 ##############################################################################
 
+from datetime import datetime
 from odoo import fields, models,  _
 from odoo.exceptions import UserError
 
@@ -66,7 +67,24 @@ class IrSequence(models.Model):
     def _next_do(self):
         if self.implementation == 'standard':
             if self.auto_reset:
-                current_time = ':'.join([self.reset_period, self.reset_period])
+                today = datetime.today()
+                reset_time = 0
+                reset_period = self.reset_period
+                if reset_period == 'year':
+                    reset_time = today.year()
+                elif reset_period == 'month':
+                    reset_time = today.month()
+                elif reset_period == 'woy':
+                    reset_time = today.week()
+                elif reset_period == 'day':
+                    reset_time = today.day()
+                elif reset_period == 'h24':
+                    reset_time = today.hour()
+                elif reset_period == 'min':
+                    reset_time = today.minute()
+                elif reset_period == 'sec':
+                    reset_time = today.second()
+                current_time = ':'.join([reset_period, reset_time])
                 if current_time != self.reset_time:
                     self.reset_time = current_time
                     _alter_sequence(self._cr, "ir_sequence_%03d" % self.id, self.number_increment, self.reset_init_number)  # NoQA
@@ -83,7 +101,24 @@ class IrSequenceDateRange(models.Model):
     def _next(self):
         if self.sequence_id.implementation == 'standard':
             if self.sequence_id.auto_reset:
-                current_time = ':'.join([self.reset_period, self.reset_period])
+                reset_time = 0
+                reset_period = self.reset_period
+                today = datetime.today()
+                if reset_period == 'year':
+                    reset_time = today.year()
+                elif reset_period == 'month':
+                    reset_time = today.month()
+                elif reset_period == 'woy':
+                    reset_time = today.week()
+                elif reset_period == 'day':
+                    reset_time = today.day()
+                elif reset_period == 'h24':
+                    reset_time = today.hour()
+                elif reset_period == 'min':
+                    reset_time = today.minute()
+                elif reset_period == 'sec':
+                    reset_time = today.second()
+                current_time = ':'.join([reset_period, reset_time])
                 if current_time != self.sequence_id.reset_time:
                     self.sequence_id.reset_time = current_time
                     _alter_sequence(self._cr, "ir_sequence_%03d" % self.id, self.number_increment, self.reset_init_number)  # NoQA
