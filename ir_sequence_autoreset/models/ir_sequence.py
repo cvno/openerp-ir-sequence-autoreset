@@ -71,22 +71,22 @@ class IrSequence(models.Model):
                 reset_time = 0
                 reset_period = self.reset_period
                 if reset_period == 'year':
-                    reset_time = today.year()
+                    reset_time = today.year
                 elif reset_period == 'month':
-                    reset_time = today.month()
+                    reset_time = today.month
                 elif reset_period == 'woy':
-                    reset_time = today.week()
+                    reset_time = today.week
                 elif reset_period == 'day':
-                    reset_time = today.day()
+                    reset_time = today.day
                 elif reset_period == 'h24':
-                    reset_time = today.hour()
+                    reset_time = today.hour
                 elif reset_period == 'min':
-                    reset_time = today.minute()
+                    reset_time = today.minute
                 elif reset_period == 'sec':
-                    reset_time = today.second()
-                current_time = ':'.join([reset_period, reset_time])
+                    reset_time = today.second
+                current_time = ':'.join([reset_period, str(reset_time)])
                 if current_time != self.reset_time:
-                    self.env.cr.execute("UPDATE ir_sequence SET reset_time=%s WHERE id=%s ", (current_time, self.id))
+                    self.reset_time = current_time
                     _alter_sequence(self._cr, "ir_sequence_%03d" % self.id, self.number_increment, self.reset_init_number)  # NoQA
                     self._cr.commit()
             number_next = _select_nextval(self._cr, 'ir_sequence_%03d' % self.id)
@@ -105,23 +105,22 @@ class IrSequenceDateRange(models.Model):
                 reset_period = self.reset_period
                 today = datetime.today()
                 if reset_period == 'year':
-                    reset_time = today.year()
+                    reset_time = today.year
                 elif reset_period == 'month':
-                    reset_time = today.month()
+                    reset_time = today.month
                 elif reset_period == 'woy':
-                    reset_time = today.week()
+                    reset_time = today.week
                 elif reset_period == 'day':
-                    reset_time = today.day()
+                    reset_time = today.day
                 elif reset_period == 'h24':
-                    reset_time = today.hour()
+                    reset_time = today.hour
                 elif reset_period == 'min':
-                    reset_time = today.minute()
+                    reset_time = today.minute
                 elif reset_period == 'sec':
-                    reset_time = today.second()
-                current_time = ':'.join([reset_period, reset_time])
+                    reset_time = today.second
+                current_time = ':'.join([reset_period, str(reset_time)])
                 if current_time != self.sequence_id.reset_time:
                     self.sequence_id.reset_time = current_time
-                    self.env.cr.execute("UPDATE ir_sequence SET reset_time=%s WHERE id=%s ", (current_time, self.sequence_id.id))
                     _alter_sequence(self._cr, "ir_sequence_%03d" % self.id, self.number_increment, self.reset_init_number)  # NoQA
                     self._cr.commit()
             number_next = _select_nextval(self._cr, 'ir_sequence_%03d_%03d' % (self.sequence_id.id, self.id))
